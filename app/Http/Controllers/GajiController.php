@@ -10,22 +10,30 @@ class GajiController extends Controller
 {
     public function index()
     {
-        // 1. Ambil data Gaji, sekalian ambil data Karyawannya (Eager Loading)
-        // 2. Urutkan berdasarkan Tahun DESC, lalu Bulan (Custom Order)
-        $gaji = GajiKaryawan::with('karyawan')
-            ->orderBy('tahun', 'desc')
-            ->orderByRaw("FIELD(bulan, 'Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember') DESC")
-            ->get();
-
-        // 3. Ambil data semua Karyawan untuk dropdown di Modal Tambah
-        $karyawanList = DataKaryawan::orderBy('nama', 'asc')->get();
+        $gaji = GajiKaryawan::ambilSemua();
+        $karyawanList = DataKaryawan::ambilSemua();
 
         return view('gaji.index', compact('gaji', 'karyawanList'));
     }
 
     public function store(Request $request)
     {
-        // Validasi
+        $request->validate([
+            'id_karyawan' => 'required|unique:gaji_karyawan,id_karyawan,NULL,id,bulan,' . $request->bulan . ',tahun,' . $request->tahun,
+            'bulan'       => 'required',
+            'tahun'       => 'required|numeric',
+            'gaji_pokok'  => 'required|numeric',
+            'tunjangan'   => 'required|numeric',
+            'potongan'    => 'required|numeric',
+        ]);
+
+        GajiKaryawan::tambah($request->all());
+
+        return back()->with('success', 'Data Gaji Berhasil Ditambahkan');
+    }
+
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'id_karyawan' => 'required',
             'bulan'       => 'required',
@@ -35,44 +43,27 @@ class GajiController extends Controller
             'potongan'    => 'required|numeric',
         ]);
 
-        // Hitung total otomatis
-        $total = ($request->gaji_pokok + $request->tunjangan) - $request->potongan;
+        $isDuplicate = GajiKaryawan::cekDuplikat(
+            $request->id_karyawan,
+            $request->bulan,
+            $request->tahun,
+            $id
+        );
 
-        // Simpan
-        GajiKaryawan::create([
-            'id_karyawan' => $request->id_karyawan,
-            'bulan'       => $request->bulan,
-            'tahun'       => $request->tahun,
-            'gaji_pokok'  => $request->gaji_pokok,
-            'tunjangan'   => $request->tunjangan,
-            'potongan'    => $request->potongan,
-            'total_gaji'  => $total < 0 ? 0 : $total, // Pastikan tidak minus
-        ]);
+        if ($isDuplicate) {
+            return back()
+                ->withErrors(['id_karyawan' => 'Slip gaji periode ini sudah ada!'])
+                ->withInput();
+        }
 
-        return redirect()->back()->with('success', 'Data Gaji Berhasil Ditambahkan');
-    }
+        GajiKaryawan::ubah($id, $request->all());
 
-    public function update(Request $request, $id)
-    {
-        $gaji = GajiKaryawan::findOrFail($id);
-        
-        $total = ($request->gaji_pokok + $request->tunjangan) - $request->potongan;
-
-        $gaji->update([
-            'bulan'       => $request->bulan,
-            'tahun'       => $request->tahun,
-            'gaji_pokok'  => $request->gaji_pokok,
-            'tunjangan'   => $request->tunjangan,
-            'potongan'    => $request->potongan,
-            'total_gaji'  => $total < 0 ? 0 : $total,
-        ]);
-
-        return redirect()->back()->with('success', 'Data Gaji Berhasil Diupdate');
+        return back()->with('success', 'Data Gaji Berhasil Diupdate');
     }
 
     public function destroy($id)
     {
-        GajiKaryawan::findOrFail($id)->delete();
-        return redirect()->back()->with('success', 'Data Gaji Berhasil Dihapus');
+        GajiKaryawan::hapus($id);
+        return back()->with('success', 'Data Gaji Berhasil Dihapus');
     }
 }

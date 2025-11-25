@@ -12,6 +12,9 @@
     <h1 class="text-2xl font-bold text-gray-800 px-4 md:px-12">
       <span class="text-gray-700">Z.</span><span class="text-green-600">Corporate</span>
     </h1>
+    <div class="flex items-center gap-4 mr-2">
+      <img src="{{ asset('assets/logo.png') }}" alt="Logo" class="w-20 h-auto">
+      
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit" class="flex items-center gap-2 text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100">
@@ -25,23 +28,6 @@
 
 <main class="flex-1 px-4 md:px-10 py-10">
   <div class="w-full max-w-6xl mx-auto">
-
-    @if(session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-        {{ session('success') }}
-    </div>
-    @endif
-
-    @if($errors->any())
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-        <strong class="font-bold">Periksa inputan anda:</strong>
-        <ul class="list-disc ml-5 text-sm">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
 
     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
       <a href="{{ route('dashboard') }}" class="w-full sm:w-auto text-center bg-black text-white px-5 py-2 font-semibold hover:bg-gray-800 transition rounded-sm">Kembali</a>
@@ -75,7 +61,7 @@
                 <td class="py-2 px-3">{{ $data->alamat }}</td>
                 <td class="py-2 px-3">{{ $data->no_telp }}</td>
                 <td class="py-2 px-3 text-center flex justify-center items-center gap-2">
-                    <button onclick="editData({{ $data->id }}, '{{ $data->nama }}', '{{ $data->jabatan }}', '{{ $data->alamat }}', '{{ $data->no_telp }}')" 
+                    <button onclick="editData({{ $data->id }}, '{{ $data->nama }}', '{{ $data->jabatan }}', '{{ $data->alamat }}', '{{ $data->no_telp }}')"
                         class="text-green-600 hover:text-green-800">
                         <i class="ri-edit-2-fill text-xl"></i>
                     </button>
@@ -108,11 +94,11 @@
     </div>
 
     <form action="{{ route('karyawan.store') }}" method="POST" class="p-6 space-y-4 flex flex-col">
-      @csrf 
+      @csrf
       
       <div>
         <label class="block font-semibold mb-1 text-black">Nama</label>
-        <input type="text" name="nama" class="border border-green-400 rounded w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" required>
+          <input type="text" name="nama" class="border border-green-400 rounded w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" required>
       </div>
       <div>
         <label class="block font-semibold mb-1 text-black">Jabatan</label>
@@ -144,7 +130,7 @@
 
     <form id="formEdit" method="POST" class="p-6 space-y-4 flex flex-col">
       @csrf
-      @method('PUT') 
+      @method('PUT')
 
       <div>
         <label class="block font-semibold mb-1 text-black">Nama</label>
@@ -193,6 +179,24 @@ function editData(id, nama, jabatan, alamat, no_telp) {
 }
 
 function closeModalEdit() { document.getElementById('modalEdit').classList.add('hidden'); }
+</script>
+
+<script>
+    // --- POPUP SUKSES (Kalau ada session success) ---
+    @if(session('success'))
+        alert("{{ session('success') }}");
+    @endif
+
+    // --- POPUP ERROR (Kalau ada validasi gagal) ---
+    @if($errors->any())
+        let pesanError = "GAGAL MENYIMPAN DATA:\n";
+        
+        @foreach ($errors->all() as $error)
+            pesanError += "- {{ $error }}\n";
+        @endforeach
+        
+        alert(pesanError);
+    @endif
 </script>
 
 </body>

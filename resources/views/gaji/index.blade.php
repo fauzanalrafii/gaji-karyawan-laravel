@@ -12,6 +12,9 @@
     <h1 class="text-2xl font-bold text-gray-800 px-4 md:px-12">
       <span class="text-gray-700">Z.</span><span class="text-green-600">Corporate</span>
     </h1>
+    <div class="flex items-center gap-4 mr-2">
+      <img src="{{ asset('assets/logo.png') }}" alt="Logo" class="w-20 h-auto">
+      
     <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit" class="flex items-center gap-2 text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100">
@@ -25,12 +28,6 @@
 
 <main class="flex-1 px-4 md:px-10 py-10">
     <div class="w-full max-w-6xl mx-auto">
-        
-        @if(session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-            {{ session('success') }}
-        </div>
-        @endif
 
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
             <a href="{{ route('dashboard') }}" class="w-full sm:w-auto text-center bg-black text-white px-5 py-2 font-semibold hover:bg-gray-800 rounded-sm">Kembali</a>
@@ -141,6 +138,8 @@
       @csrf
       @method('PUT')
 
+      <input type="hidden" name="id_karyawan" id="edit_input_id_karyawan">
+
       <div>
         <label class="block font-semibold mb-1">Nama Karyawan</label>
         <input id="edit_nama_karyawan" type="text" class="border border-gray-400 rounded w-full px-3 py-2 bg-gray-100" readonly>
@@ -192,6 +191,8 @@ function openModalEdit(data){
     // Set URL Action Form
     document.getElementById('formEdit').action = '/gaji/' + data.id_gaji;
 
+    document.getElementById('edit_input_id_karyawan').value = data.id_karyawan;
+
     // Isi Form
     // Perhatikan: data.karyawan bisa null jika karyawan dihapus
     document.getElementById('edit_nama_karyawan').value = data.karyawan ? data.karyawan.nama : 'Karyawan Dihapus';
@@ -204,6 +205,25 @@ function openModalEdit(data){
 
 function closeModalEdit(){ document.getElementById('modalEdit').classList.add('hidden'); }
 </script>
+
+<script>
+    // --- POPUP SUKSES (Kalau ada session success) ---
+    @if(session('success'))
+        alert("{{ session('success') }}");
+    @endif
+
+    // --- POPUP ERROR (Kalau ada validasi gagal) ---
+    @if($errors->any())
+        let pesanError = "GAGAL MENYIMPAN DATA:\n";
+        
+        @foreach ($errors->all() as $error)
+            pesanError += "- {{ $error }}\n";
+        @endforeach
+        
+        alert(pesanError);
+    @endif
+</script>
+
 
 </body>
 </html>

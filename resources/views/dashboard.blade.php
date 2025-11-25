@@ -13,7 +13,7 @@
       <span class="text-gray-700">Z.</span><span class="text-green-600">Corporate</span>
     </h1>
     <div class="flex items-center gap-4 mr-2">
-      <img src="{{ asset('assets/logo.png') }}" alt="Logo" class="w-32 h-auto"> 
+      <img src="{{ asset('assets/logo.png') }}" alt="Logo" class="w-20 h-auto">
       
       <form action="{{ route('logout') }}" method="POST">
           @csrf
@@ -38,7 +38,7 @@
           <p class="text-lg text-black">
             <span class="text-red-600 font-semibold">Welcome,</span>
             <a href="#" class="text-black-100 font-semibold underline">
-                {{ Auth::user()->name ?? 'Admin' }} ! 
+                {{ Auth::user()->name ?? 'Admin' }} !
             </a>
           </p>
 
