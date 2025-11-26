@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <title>Data Gaji Karyawan</title>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="{{ asset('assets/logo.png') }}">
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen flex flex-col bg-gradient-to-b from-green-400 to-green-100 font-sans">
 
@@ -17,11 +18,9 @@
       
     <form action="{{ route('logout') }}" method="POST">
         @csrf
-        <button type="submit" class="flex items-center gap-2 text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-            </svg>
-            Keluar
+        <button type="submit" class="cursor-pointer flex items-center gap-2 text-gray-600 hover:text-red-600 hover:bg-red-50 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 border border-transparent hover:border-red-100">
+            <i class="ri-logout-box-line text-lg"></i>
+            <span>Keluar</span>
         </button>
     </form>
 </header>
@@ -85,7 +84,7 @@
     </div>
 </main>
 
-<div id="modalTambah" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div id="modalTambah" class="hidden fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" style="background-color: rgba(0, 0, 0, 0.2);">
   <div class="bg-white w-full max-w-md rounded-lg shadow-lg overflow-hidden">
     <div class="bg-green-600 text-white text-center py-3 text-lg font-semibold">Tambah Data Gaji</div>
     <form action="{{ route('gaji.store') }}" method="POST" class="p-6 space-y-4">
@@ -131,7 +130,7 @@
   </div>
 </div>
 
-<div id="modalEdit" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div id="modalEdit" class="hidden fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" style="background-color: rgba(0, 0, 0, 0.2);">
   <div class="bg-white w-full max-w-md rounded-lg shadow-lg overflow-hidden">
     <div class="bg-green-600 text-white text-center py-3 text-lg font-semibold">Edit Data Gaji</div>
     <form id="formEdit" method="POST" class="p-6 space-y-4">

@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistem Penggajian Karyawan</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="{{ asset('assets/logo.png') }}">
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen flex flex-col bg-gradient-to-b from-green-400 to-green-100 font-sans">
 
@@ -15,15 +17,13 @@
     <div class="flex items-center gap-4 mr-2">
       <img src="{{ asset('assets/logo.png') }}" alt="Logo" class="w-20 h-auto">
       
-      <form action="{{ route('logout') }}" method="POST">
-          @csrf
-          <button type="submit" class="flex items-center gap-2 text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-              </svg>
-              Keluar
-          </button>
-      </form>
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit" class="cursor-pointer flex items-center gap-2 text-gray-600 hover:text-red-600 hover:bg-red-50 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 border border-transparent hover:border-red-100">
+            <i class="ri-logout-box-line text-lg"></i>
+            <span>Keluar</span>
+        </button>
+    </form>
     </div>
   </header>
 

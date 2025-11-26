@@ -4,3 +4,16 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+table {
+  border-collapse: separate; /* atau collapse sesuai kebutuhan */
+  border: none;
+}
+
+th, td {
+  border: none;
+}
+
+h2{
+    border: none;
+}
